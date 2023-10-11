@@ -30,8 +30,8 @@ CREATE TABLE informals
 (
     row_num       INTEGER PRIMARY KEY,
     informal_text TEXT NOT NULL,
-    group1_answered INTEGER NOT NULL,
-    group2_answered INTEGER NOT NULL
+    group1_answered INTEGER DEFAULT 0,
+    group2_answered INTEGER DEFAULT 0
 );
 
 CREATE TABLE formals
