@@ -18,7 +18,7 @@ async def root():
     return {"message": "Hello!"}
 
 
-@app.get("/eval/{user}")
+@app.get("/eval/question/{user}")
 async def ask(user: str) -> models.Question:
     if not user_manager.does_user_exist(user):
         raise HTTPException(status_code=404, detail="User not found")
