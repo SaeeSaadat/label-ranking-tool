@@ -22,6 +22,7 @@ def prepare_database():
     if os.path.isfile('data/database.sqlite'):
         return
 
+    logging.info("Preparing Database!")
     with get_db_cursor(True) as cursor:
         with open('data/db_setup.sql', 'r') as file:
             sql_query = file.read()
@@ -45,10 +46,3 @@ def load_dataset_to_database():
                         (index, row[i], i)
                     )
         logging.info("Database fully loaded.")
-
-
-# prepare_database()
-
-if __name__ == '__main__':
-    # load_dataset_to_database()
-    prepare_database()

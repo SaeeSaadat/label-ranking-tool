@@ -15,12 +15,13 @@ CREATE TABLE methods
 
 CREATE TABLE submissions
 (
-    row_num         INTEGER PRIMARY KEY,
+    row_num         INTEGER   NOT NULL,
     username        TEXT      NOT NULL,
     informal_text   TEXT      NOT NULL,
-    answers         TEXT      NOT NULL, -- 1243 = 1 > 2 > 4 > 3
+    answers         TEXT      NOT NULL, -- 1,2,4,3 = 1 > 2 > 4 > 3
     submission_time TIMESTAMP NOT NULL,
 
+    PRIMARY KEY (row_num, username),
     FOREIGN KEY (row_num) REFERENCES informals (row_num),
     FOREIGN KEY (username) REFERENCES users (username)
 );

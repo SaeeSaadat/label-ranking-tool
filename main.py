@@ -11,6 +11,7 @@ import question_manager
 
 app = FastAPI()
 log_config.setup_logging()
+database_manager.prepare_database()
 
 
 @app.get("/")
@@ -33,9 +34,16 @@ async def ask(user: str) -> models.Question:
     return question
 
 
-
 @app.post("/eval/submit")
-async def submit(submission: models.SubmissionInput):
+async def submit(submission: models.Submission):
     logging.info(f"User {submission.username} submitted -> row {submission.row_num} -> {submission.rankings}")
-    # submission_manager
+    if not user_manager.does_user_exist(submission.username):
+        logging.error(f"Invalid user request! -> {submission.username}")
+        raise HTTPException(status_code=404, detail="User not found")
+
+    try:
+        submission_manager.submit_answer(submission)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
     return {"message": "OK"}

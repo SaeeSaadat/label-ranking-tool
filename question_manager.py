@@ -37,6 +37,3 @@ def get_question(username: str) -> Optional[Question]:
 
         return Question(row_num=row_num, user_answer_count=answer_count, informal=informal, formals=formals)
 
-
-if __name__ == '__main__':
-    print(get_question('user1'))

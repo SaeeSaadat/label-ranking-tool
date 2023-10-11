@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 
-class SubmissionInput(BaseModel):
+class Submission(BaseModel):
     username: str
     row_num: int
     informal: str
