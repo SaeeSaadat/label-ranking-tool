@@ -2,16 +2,23 @@ import logging
 from typing import Optional
 
 from database_manager import get_db_cursor
+import lock_manager
 import user_manager
 from models import Question
 
 
 def get_question(username: str) -> Optional[Question]:
     group = user_manager.get_user_group(username)
+
+    lock_manager.check_for_expired_locks(group)
+
     question_query = f"""
         SELECT row_num, informal_text
         FROM informals
-        WHERE group{group}_answered = 0;
+        WHERE group{group}_answered = 0
+        AND NOT EXISTS (
+            select * from locks where group_id = {group} and row_num = informals.row_num and username != '{username}'
+            )
     """
 
     answers_query = f"""
@@ -35,5 +42,6 @@ def get_question(username: str) -> Optional[Question]:
         formals = {method_id: text for method_id, text in result}
         answer_count = user_manager.get_user_answer_count(username)
 
+        lock_manager.lock(group, row_num, username)
         return Question(row_num=row_num, user_answer_count=answer_count, informal=informal, formals=formals)
 

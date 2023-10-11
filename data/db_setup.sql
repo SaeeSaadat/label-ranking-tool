@@ -46,6 +46,24 @@ CREATE TABLE formals
     FOREIGN KEY (method_id) REFERENCES methods (method_id)
 );
 
+
+CREATE TABLE locks
+(
+    row_num INTEGER NOT NULL ,
+    group_id INTEGER NOT NULL,
+    username TEXT NOT NULL,
+    time TIMESTAMP NOT NULL,
+
+    PRIMARY KEY (row_num, group_id),
+    FOREIGN KEY (row_num) REFERENCES informals (row_num),
+    FOREIGN KEY (username) REFERENCES users (username)
+);
+
+
+
+
+
+
 INSERT INTO methods (method_id, method_description) VALUES (1, 'GPT2 TRAINED ON HANDMADE DATA');
 INSERT INTO methods (method_id, method_description) VALUES (2, 'GPT2 TRAINED ON FULL DATA');
 INSERT INTO methods (method_id, method_description) VALUES (3, 'T5 TRAINED ON HANDMADE DATA');
