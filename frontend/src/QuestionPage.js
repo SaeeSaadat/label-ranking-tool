@@ -49,23 +49,46 @@ const QuestionPage = (props) => {
                 Object.entries(props.firstQuestion.formals).map(([id, text]) => ([
                     id,
                     text
-                ]))
-            )
+                ])).sort(() => Math.random() - 0.5)
+        )
         }, [props.firstQuestion]);
 
         return (
-            <div>
-                <h2>جمله غیر رسمی</h2>
-                <p>{question.informal}</p>
-                <h2>لطفا جملات رسمی شده زیر را به ترتیبی به که نظر شما صحیح‌تر است مرتب کنید.</h2>
-                <SortableList items={items} onSortEnd={onSortEnd}/>
-                <div>شما تا کنون
-                    در برچسب‌گذاری {question['user_answer_count']} داده مشارکت کرده‌اید.
+            <section>
+                <div
+                    className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8"
+                >
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
+                        <div
+                            className="relative h-64 overflow-hidden rounded-lg sm:h-80 lg:order-last lg:h-full"
+                        >
+                            {error && <div style={{color: 'red'}}>{error}</div>}
+                            <SortableList items={items} onSortEnd={onSortEnd}/>
+                        </div>
+
+                        <div className="lg:py-24">
+                            <h2 className="text-2xl font-bold sm:text-2xl">سوال {question['user_answer_count']}</h2>
+                            <h3 className="text-xl sm:text-xl">لطفا جملات رسمی شده زیر را به ترتیبی به که نظر شما صحیح‌تر
+                                است مرتب کنید.</h3>
+                            <p className="mt-4 text-gray-600 text-xl">
+                                <span className="text-lg font-bold sm:text-lg"> جمله غیر رسمی: </span>{question.informal}
+                            </p>
+
+                            <a
+                                onClick={handleNextClick}
+                                className="m-2 inline-block rounded border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
+                            >
+                                ذخیره و جمله بعدی
+                            </a>
+                            <a
+                                className="m-2 inline-block rounded border border-indigo-600 px-12 py-3 text-sm font-medium text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
+                            >
+                                ذخیره و اتمام مشارکت
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <button onClick={handleNextClick}>ذخیره و جمله بعدی</button>
-                <button>ذخیره و اتمام مشارکت</button>
-                {error && <div style={{color: 'red'}}>{error}</div>}
-            </div>
+            </section>
         );
     }
 ;
