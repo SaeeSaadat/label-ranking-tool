@@ -5,7 +5,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - '8989:8989'
+      - '8989:8000'
     volumes:
       - ./backend/logs:/app/logs
       - ./backend/data:/app/data
