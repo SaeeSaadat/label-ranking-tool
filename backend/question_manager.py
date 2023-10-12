@@ -15,10 +15,14 @@ def get_question(username: str) -> Optional[Question]:
     question_query = f"""
         SELECT row_num, informal_text
         FROM informals
-        WHERE group{group}_answered = 0
-        AND NOT EXISTS (
+        WHERE NOT EXISTS (
             select * from locks where group_id = {group} and row_num = informals.row_num and username != '{username}'
             )
+        AND NOT EXISTS(
+            select * from submissions 
+            join users on submissions.username = users.username
+             where users.group_id = {group} and submissions.row_num = informals.row_num
+        )
     """
 
     answers_query = f"""
