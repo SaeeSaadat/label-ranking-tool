@@ -15,7 +15,7 @@ COPY . .
 
 # Replace the proxy value in package.json with the environment variable
 #ARG NEW_PROXY="https://evalapi.ayot.tech/eval"
-ARG NEW_PROXY
+ARG NEW_PROXY=https://evalapi.ayot.tech/eval
 RUN sed -i "s~\"proxy\": \".*\"~\"proxy\": \"${NEW_PROXY}\"~" package.json
 
 # Build the React app
