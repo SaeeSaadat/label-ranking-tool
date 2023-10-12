@@ -13,11 +13,6 @@ RUN npm install --production
 # Copy the rest of the application code to the container
 COPY . .
 
-# Replace the proxy value in package.json with the environment variable
-#ARG NEW_PROXY="https://evalapi.ayot.tech/eval"
-# ARG NEW_PROXY=https://evalapi.ayot.tech/eval
-# RUN sed -i "s~\"proxy\": \".*\"~\"proxy\": \"${NEW_PROXY}\"~" package.json
-
 # Build the React app
 RUN npm install -g env-cmd
 RUN npm run build

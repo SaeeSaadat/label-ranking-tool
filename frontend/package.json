@@ -21,8 +21,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start:debug": "env-cmd -f ./.env.debug react-scripts start",
-    "start:deploy": "env-cmd -f ./.env.deploy react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
