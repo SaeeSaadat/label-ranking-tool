@@ -11,6 +11,7 @@ const StartPage = () => {
     const [firstQuestion, setFirstQuestion] = useState()
     const [questionPage, setQuestionPage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
 
     const fetchFirstQuestion = useCallback(async () => {
@@ -26,6 +27,10 @@ const StartPage = () => {
             const jsonData = await response.json();
             if (response.ok)
                 setFirstQuestion(jsonData);
+            else if (response.status === 404)
+                setError('کاربری با این نام کاربری وجود ندارد.')
+            else
+                setError('خطایی پیش آمده است.')
             return jsonData;
         } catch (error) {
             console.log(error);
@@ -75,7 +80,11 @@ const StartPage = () => {
     </span>
             <ReactTooltip variant="info" wrapper='p' float='true' clickable='true'
                           style={{
-                              maxWidth: '250px', height: 'auto', fontSize: '9pt', fontWeight: 'normal',lineHeight:'20px'
+                              maxWidth: '250px',
+                              height: 'auto',
+                              fontSize: '9pt',
+                              fontWeight: 'normal',
+                              lineHeight: '20px'
                           }}
                           id='tips'/>
         </div>
@@ -121,14 +130,12 @@ const StartPage = () => {
                             <div>
                                 {isLoading ?
                                     <button
-                                        type="submit"
-                                        className="disabled flex w-full justify-center rounded-md bg-green-300 px-3
-                                    py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500
+                                        className="disabled flex w-full justify-center rounded-md bg-indigo-100 px-3
+                                    py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-100
                                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
                                      focus-visible:outline-indigo-600"
-                                        onClick={handleStartClick}
                                     >
-                                        شروع ارزیابی
+                                        در حال پردازش
                                     </button>
                                     :
                                     <button
@@ -142,6 +149,7 @@ const StartPage = () => {
                                         شروع ارزیابی
                                     </button>
                                 }
+                                {error && <div className='rounded-xl bg-red-100 text-red-800 p-2 m-2'>{error}</div>}
                             </div>
                         </form>
                     </div>

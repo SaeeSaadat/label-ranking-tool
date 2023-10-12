@@ -3,16 +3,17 @@ import SortableList from "./SortableList";
 import {arrayMoveImmutable} from "array-move";
 
 
-
 const QuestionPage = (props) => {
         const [question, setQuestion] = useState({});
         const [items, setItems] = useState([]);
         const [error, setError] = useState('');
+        const [isLoading, setIsLoading] = useState(false);
         const onSortEnd = ({oldIndex, newIndex}) => {
             setItems(prevItem => (arrayMoveImmutable(prevItem, oldIndex, newIndex)));
         };
 
         const handleNextClick = (event, nextQ) => {
+            setIsLoading(true);
             event.preventDefault();
             fetch(`${process.env.REACT_APP_API_HOST}/submit`, {
                 method: 'POST',
@@ -31,12 +32,16 @@ const QuestionPage = (props) => {
                         props.handleQ(false);
                     return response.json();
                 } else {
-                    setError(response['detail']['msg']);
+                    try {
+                        setError(response['detail']['msg']);
+                    }
+                    catch (e){
+                        setError('خطایی پیش آمده است.')
+                    }
                 }
             })
                 .then((data) => {
-                    // Handle successful response
-                    // ...
+                    setIsLoading(false);
                 }).catch((error) => {
                 setError(error.message);
             });
@@ -61,7 +66,7 @@ const QuestionPage = (props) => {
                         <div
                             className="relative h-64 overflow-scroll rounded-lg sm:h-80 lg:order-last lg:h-full"
                         >
-                            {error && <div style={{color: 'red'}}>{error}</div>}
+                            {error && <div className='rounded-xl bg-red-100 text-red-800 p-2 m-2'>{error}</div>}
                             <SortableList items={items} onSortEnd={onSortEnd}/>
                         </div>
 
@@ -73,12 +78,23 @@ const QuestionPage = (props) => {
                                 <span className="text-lg font-bold sm:text-lg"> جمله غیر رسمی: </span>{question.informal}
                             </p>
 
-                            <a
-                                onClick={(event) => handleNextClick(event, true)}
-                                className="m-2 inline-block rounded border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
-                            >
-                                ذخیره و جمله بعدی
-                            </a>
+                            {isLoading?
+                                <a
+                                    className="disabled m-2 inline-block rounded border border-indigo-600
+                                     bg-indigo-100 px-12 py-3 text-sm font-medium text-white hover:bg-transparent
+                                      hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
+                                >
+                                    در حال پردازش
+                                </a>
+                                :
+                                <a
+                                    onClick={(event) => handleNextClick(event, true)}
+                                    className="m-2 inline-block rounded border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
+                                >
+                                    ذخیره و جمله بعدی
+                                </a>
+                            }
+
                             <a
                                 onClick={(event) => handleNextClick(event, false)}
                                 className="m-2 inline-block rounded border border-indigo-600 px-12 py-3 text-sm font-medium text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
