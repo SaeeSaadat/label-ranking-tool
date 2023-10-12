@@ -15,10 +15,11 @@ COPY . .
 
 # Replace the proxy value in package.json with the environment variable
 #ARG NEW_PROXY="https://evalapi.ayot.tech/eval"
-ARG NEW_PROXY=https://evalapi.ayot.tech/eval
-RUN sed -i "s~\"proxy\": \".*\"~\"proxy\": \"${NEW_PROXY}\"~" package.json
+# ARG NEW_PROXY=https://evalapi.ayot.tech/eval
+# RUN sed -i "s~\"proxy\": \".*\"~\"proxy\": \"${NEW_PROXY}\"~" package.json
 
 # Build the React app
+RUN npm install -g env-cmd
 RUN npm run build
 
 # Set the environment variable for the port
@@ -28,4 +29,4 @@ ENV PORT 3999
 EXPOSE $PORT
 
 # Set the command to run the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
