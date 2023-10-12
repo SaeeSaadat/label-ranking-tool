@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '8989:8989'
+    volumes:
+      - ./backend/logs:/app/logs
+      - ./backend/data:/app/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+         NEW_PROXY: http://backend:8000/eval
+    ports:
+      - '3999:3999'
