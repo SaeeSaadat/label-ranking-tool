@@ -2,7 +2,8 @@ import React from 'react';
 
 const ThanksPage = (props) => {
     return (
-        <div>thank you</div>
+        <div>از مشارکت شما سپاس‌گزاریم.</div>
+
     );
 };
 

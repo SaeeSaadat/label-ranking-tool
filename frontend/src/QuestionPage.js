@@ -1,10 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import Reorder, {
-    reorder,
-    reorderImmutable,
-    reorderFromTo,
-    reorderFromToImmutable
-} from 'react-reorder';
 import SortableList from "./SortableList";
 import {arrayMoveImmutable} from "array-move";
 
@@ -65,17 +59,17 @@ const QuestionPage = (props) => {
                 >
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
                         <div
-                            className="relative h-64 overflow-hidden rounded-lg sm:h-80 lg:order-last lg:h-full"
+                            className="relative h-64 overflow-scroll rounded-lg sm:h-80 lg:order-last lg:h-full"
                         >
                             {error && <div style={{color: 'red'}}>{error}</div>}
                             <SortableList items={items} onSortEnd={onSortEnd}/>
                         </div>
 
                         <div className="lg:py-24">
-                            <h2 className="text-2xl font-bold sm:text-2xl">جمله شماره {question['row_num']}</h2>
-                            <h3 className="text-xl sm:text-xl">لطفا جملات رسمی شده زیر را به ترتیبی به که نظر شما صحیح‌تر
+                            <h2 className="text-2xl font-bold">جمله شماره {question['row_num']}</h2>
+                            <h3 className="text-sm">لطفا جملات رسمی شده زیر را به ترتیبی به که نظر شما صحیح‌تر
                                 است مرتب کنید.</h3>
-                            <p className="mt-4 text-gray-600 text-xl">
+                            <p className="max-w-2xl h-fit text-center rtl bg-blue-100 m-2 p-2 rounded-xl select-none">
                                 <span className="text-lg font-bold sm:text-lg"> جمله غیر رسمی: </span>{question.informal}
                             </p>
 
@@ -91,7 +85,7 @@ const QuestionPage = (props) => {
                             >
                                 ذخیره و اتمام مشارکت
                             </a>
-                            <h3 className="text-xl sm:text-xl">
+                            <h3 className="text-sm">
                                 شما تا کنون در بررسی {question['user_answer_count']} جمله مشارکت کرده‌اید.
                             </h3>
                         </div>
