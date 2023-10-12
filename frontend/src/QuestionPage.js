@@ -8,6 +8,8 @@ import Reorder, {
 import SortableList from "./SortableList";
 import {arrayMoveImmutable} from "array-move";
 
+
+
 const QuestionPage = (props) => {
         const [question, setQuestion] = useState({});
         const [items, setItems] = useState([]);
@@ -16,9 +18,9 @@ const QuestionPage = (props) => {
             setItems(prevItem => (arrayMoveImmutable(prevItem, oldIndex, newIndex)));
         };
 
-        const handleNextClick = (event) => {
+        const handleNextClick = (event, nextQ) => {
             event.preventDefault();
-            fetch('/submit', {
+            fetch(`${process.env.REACT_APP_API_HOST}/submit`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json',},
                 body: JSON.stringify({
@@ -29,10 +31,13 @@ const QuestionPage = (props) => {
                 }),
             }).then((response) => {
                 if (response.ok) {
-                    props.handleQ();
+                    if (nextQ)
+                        props.handleQ(true);
+                    else
+                        props.handleQ(false);
                     return response.json();
                 } else {
-                    setError('error from server');
+                    setError(response['detail']['msg']);
                 }
             })
                 .then((data) => {
@@ -50,7 +55,7 @@ const QuestionPage = (props) => {
                     id,
                     text
                 ])).sort(() => Math.random() - 0.5)
-        )
+            )
         }, [props.firstQuestion]);
 
         return (
@@ -67,7 +72,7 @@ const QuestionPage = (props) => {
                         </div>
 
                         <div className="lg:py-24">
-                            <h2 className="text-2xl font-bold sm:text-2xl">سوال {question['user_answer_count']}</h2>
+                            <h2 className="text-2xl font-bold sm:text-2xl">جمله شماره {question['row_num']}</h2>
                             <h3 className="text-xl sm:text-xl">لطفا جملات رسمی شده زیر را به ترتیبی به که نظر شما صحیح‌تر
                                 است مرتب کنید.</h3>
                             <p className="mt-4 text-gray-600 text-xl">
@@ -75,16 +80,20 @@ const QuestionPage = (props) => {
                             </p>
 
                             <a
-                                onClick={handleNextClick}
+                                onClick={(event) => handleNextClick(event, true)}
                                 className="m-2 inline-block rounded border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
                             >
                                 ذخیره و جمله بعدی
                             </a>
                             <a
+                                onClick={(event) => handleNextClick(event, false)}
                                 className="m-2 inline-block rounded border border-indigo-600 px-12 py-3 text-sm font-medium text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
                             >
                                 ذخیره و اتمام مشارکت
                             </a>
+                            <h3 className="text-xl sm:text-xl">
+                                شما تا کنون در بررسی {question['user_answer_count']} جمله مشارکت کرده‌اید.
+                            </h3>
                         </div>
                     </div>
                 </div>

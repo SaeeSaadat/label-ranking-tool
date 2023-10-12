@@ -1,10 +1,12 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import QuestionPage from "./QuestionPage";
+import ThanksPage from "./ThanksPage";
 
 const StartPage = () => {
     const username = useRef('');
     const [fiValue, setFiValue] = useState(null);
     const [isQuestion, setIsQuestion] = useState(false)
+    const [isThanks, setIsThanks] = useState(false)
     const [firstQuestion, setFirstQuestion] = useState()
     const [questionPage, setQuestionPage] = useState(null);
 
@@ -13,10 +15,10 @@ const StartPage = () => {
         try {
             let response
             if (fiValue) {
-                response = await fetch('/question/' + fiValue);
+                response = await fetch(`${process.env.REACT_APP_API_HOST}/question/` + fiValue);
             } else {
                 setFiValue(username.current.value)
-                response = await fetch('/question/' + username.current.value);
+                response = await fetch(`${process.env.REACT_APP_API_HOST}/question/` + username.current.value);
             }
             const jsonData = await response.json();
             if (response.ok)
@@ -28,8 +30,12 @@ const StartPage = () => {
         }
     };
 
-    const handleNextQuestion = useCallback(() => {
-        fetchFirstQuestion().then();
+    const handleNextQuestion = useCallback((next) => {
+        if (next)
+            fetchFirstQuestion().then();
+        else {
+            setIsThanks(true)
+        }
     }, [fetchFirstQuestion]);
 
     useEffect(() => {
@@ -44,7 +50,7 @@ const StartPage = () => {
     const handleStartClick = useCallback((event) => {
         event.preventDefault();
         // console.log(email.current.value);
-        handleNextQuestion();
+        handleNextQuestion(true);
     }, [username]);
     const StartComponent = () => {
         return (
@@ -59,6 +65,17 @@ const StartPage = () => {
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form className="space-y-6" onSubmit={handleStartClick}>
                             <div>
+                                <p>
+                                    سلام. مرسی از وقتی که برامون می‌ذارید.
+                                    هدف این پروژه پیدا کردن بهترین روش برای تبدیل فارسی محاوره‌ای به رسمی هست.
+                                    به ازای هر یک جمله‌ی غیر رسمی که توسط یک انسان نوشته شده، به ۶ روش مختلف سعی کردیم
+                                    نسخه‌های رسمیش رو تولید کنیم.
+                                    با drag and drop کردن، به ترتیبی که فکر می‌کنید بهترین نسخه‌ها هستند، گزینه‌ها رو
+                                    مرتب کنید و بعد حتما دکمه‌ی ذخیره رو بزنید.
+                                    لطفا دقت داشته باشید که اگر نسخه‌ای زیاد شبیه نسخه‌ی اصلی بود و به حالت رسمی و
+                                    نوشتاری در نیامده بود (میزان تغییرات کم بود)، این مساله را یک نکته‌ی منفی در نظر
+                                    بگیرید. همچنین اگر معنی جمله کاملا عوض شده بود نکته‌ی منفی است.
+                                </p>
                                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                     نام کاربری
                                 </label>
@@ -93,7 +110,7 @@ const StartPage = () => {
     return (
         <div>
             {(isQuestion && questionPage) ? (
-                questionPage
+                isThanks ? (<ThanksPage/>) : (questionPage)
             ) : (
                 <StartComponent/>
             )}
