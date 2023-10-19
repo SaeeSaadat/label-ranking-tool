@@ -46,3 +46,26 @@ def load_dataset_to_database():
                         (index, row[i], i)
                     )
         logging.info("Database fully loaded.")
+
+
+def load_new_method_to_database():
+    with get_db_cursor(True) as cursor:
+        logging.info("Loading new dataset to database!")
+        with open('data/dataset.csv', 'r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            for index, row in enumerate(reader):
+                if index == 0:
+                    continue
+                for r in row:
+                    print(r)
+                print(len(row))
+                cursor.execute(
+                    "INSERT INTO formals (row_num, formal_text, method_id) VALUES (?, ?, ?)",
+                    (index, row[-1], len(row)-1)
+                )
+
+        logging.info("Database fully loaded.")
+
+
+if __name__ == '__main__':
+    load_new_method_to_database()

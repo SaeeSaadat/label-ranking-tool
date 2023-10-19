@@ -14,3 +14,13 @@ class Question(BaseModel):
     user_answer_count: int
     informal: str
     formals: dict
+
+
+class NewQuestion(BaseModel):
+    row_num: int
+    user_answer_count: int
+    user_total_count: int
+    informal: str
+    previous_answer: List[int]
+    formals: dict
+

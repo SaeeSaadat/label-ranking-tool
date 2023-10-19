@@ -14,7 +14,6 @@ RUN npm install --production
 COPY . .
 
 # Build the React app
-RUN npm install -g env-cmd
 RUN npm run build
 
 # Set the environment variable for the port
