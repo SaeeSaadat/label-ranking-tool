@@ -19,10 +19,10 @@ const StartPage = () => {
             setIsLoading(true);
             let response
             if (fiValue) {
-                response = await fetch(`${process.env.REACT_APP_API_HOST}/question/` + fiValue);
+                response = await fetch(`${process.env.REACT_APP_API_HOST}/question_edit/` + fiValue);
             } else {
                 setFiValue(username.current.value)
-                response = await fetch(`${process.env.REACT_APP_API_HOST}/question/` + username.current.value);
+                response = await fetch(`${process.env.REACT_APP_API_HOST}/question_edit/` + username.current.value);
             }
             const jsonData = await response.json();
             if (response.ok)
