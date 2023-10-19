@@ -117,7 +117,7 @@ const QuestionPage = (props) => {
                                 ذخیره و اتمام مشارکت
                             </a>
                             <h3 className="text-sm">
-                                شما تا کنون در بررسی {question['user_answer_count']} جمله مشارکت کرده‌اید.
+                                 شما تا کنون  {question['user_answer_count']} تا از {question['user_total_count']}  بررسی خود را بازبینی کرده‌اید.
                             </h3>
                         </div>
                     </div>
