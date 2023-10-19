@@ -6,7 +6,6 @@ const SortableList = (props) => {
     return (
         <div className='text-center justify-center justify-items-center content-center items-center '>
             {props.items.map((value, index) => {
-                console.log(`Index: ${index}, Value: ${value}`);
                 return <SortableItem key={`item-${index}`} index={index} value={value} />;
             })}
         </div>
