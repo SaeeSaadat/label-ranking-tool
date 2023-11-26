@@ -34,7 +34,7 @@ async def ask(user: str) -> models.Question:
         logging.error(f"Invalid user request! -> {user}")
         raise HTTPException(status_code=404, detail="User not found")
 
-    question = question_manager.get_question_for_new_submissions(user)
+    question = question_manager.get_question(user)
     if question is None:
         logging.warning(f"No more questions were fetched for user {user}")
         raise HTTPException(status_code=404, detail="No more questions left for you. Thanks for you contribution")
@@ -58,7 +58,7 @@ async def ask(user: str) -> models.NewQuestion:
     return question
 
 
-@app.post("/eval/submit")
+@app.post("/eval/submit_edit")
 async def submit_new(submission: models.Submission):
     logging.info(f"[NEW SUBMISSIONS] "
                  f"User {submission.username} submitted -> row {submission.row_num} -> {submission.rankings}")
@@ -74,7 +74,7 @@ async def submit_new(submission: models.Submission):
     return {"message": "OK"}
 
 
-@app.post("/eval/submit_old")
+@app.post("/eval/submit")
 async def submit(submission: models.Submission):
     logging.info(f"User {submission.username} submitted -> row {submission.row_num} -> {submission.rankings}")
     if not user_manager.does_user_exist(submission.username):
@@ -82,7 +82,7 @@ async def submit(submission: models.Submission):
         raise HTTPException(status_code=404, detail="User not found")
 
     try:
-        submission_manager.submit_answer(submission)
+        submission_manager.submit_answer(submission, 7)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

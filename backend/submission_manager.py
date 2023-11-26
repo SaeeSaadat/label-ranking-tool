@@ -8,18 +8,22 @@ from datetime import datetime
 from sqlite3 import IntegrityError
 
 
-def submit_answer(submission: Submission):
-    user_group = get_user_group(submission.username)
-    rankings_text = ','.join([str(i) for i in submission.rankings])
+def submit_answer(submission: Submission, prefer_method: Optional[int] = None):
+
+    if prefer_method is not None:
+        new_rankings = edited_rankings(submission, prefer_method)
+        rankings_text = ','.join([str(i) for i in new_rankings])
+    else:
+        rankings_text = ','.join([str(i) for i in submission.rankings])
+
     submission_time = datetime.now()
+
     with get_db_cursor(commit=True) as cursor:
         try:
             cursor.execute(
                 "INSERT INTO submissions VALUES (?, ?, ?, ?, ?)",
                 (submission.row_num, submission.username, submission.informal, rankings_text, submission_time)
             )
-            cursor.execute(f"UPDATE informals SET group{user_group}_answered = 1 WHERE row_num = ?",
-                           (submission.row_num,))
             logging.info(f"Submission by user {submission.username} for row {submission.row_num} was saved in database")
         except IntegrityError as e:
             logging.error(f"Duplicate Submission from {submission.username} -> {e}")
