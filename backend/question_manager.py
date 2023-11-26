@@ -83,6 +83,6 @@ def get_question_for_new_submissions(username: str) -> Optional[NewQuestion]:
         user_answer_count=new_answer_count,
         user_total_count=total_answer_count,
         informal=question.informal,
-        previous_answer=previous_answer.rankings if previous_answer is not None else [],
+        previous_answer=[7] + previous_answer.rankings if previous_answer is not None else [],
         formals=question.formals
     )
