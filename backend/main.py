@@ -67,7 +67,7 @@ async def submit_new(submission: models.Submission):
         raise HTTPException(status_code=404, detail="User not found")
 
     try:
-        submission_manager.submit_new_answer(submission)
+        submission_manager.submit_new_answer(submission, 7)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
