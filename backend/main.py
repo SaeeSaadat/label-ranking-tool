@@ -34,7 +34,7 @@ async def ask(user: str) -> models.Question:
         logging.error(f"Invalid user request! -> {user}")
         raise HTTPException(status_code=404, detail="User not found")
 
-    question = question_manager.get_question(user)
+    question = question_manager.get_question_for_new_submissions(user)
     if question is None:
         logging.warning(f"No more questions were fetched for user {user}")
         raise HTTPException(status_code=404, detail="No more questions left for you. Thanks for you contribution")
