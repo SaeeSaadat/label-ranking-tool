@@ -62,9 +62,9 @@ async def ask(user: str) -> models.NewQuestion:
         user_total_count=100,
         informal=question.informal,
         previous_answer=[7, 1, 3, 4, 5, 6],
-        formals=question.formals[-1] + question.formals[:-1]
+        formals=question.formals
     )
-    return question
+    return new_question
 
 
 
