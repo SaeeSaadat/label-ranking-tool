@@ -34,8 +34,7 @@ const QuestionPage = (props) => {
                 } else {
                     try {
                         setError(response['detail']['msg']);
-                    }
-                    catch (e){
+                    } catch (e) {
                         setError('خطایی پیش آمده است.')
                     }
                 }
@@ -49,12 +48,28 @@ const QuestionPage = (props) => {
 
         useEffect(() => {
             setQuestion(props.firstQuestion)
-            setItems(
-                Object.entries(props.firstQuestion.formals).map(([id, text]) => ([
-                    id,
-                    text
-                ])).sort(() => Math.random() - 0.5)
-            )
+
+            const sortmap = props.firstQuestion.previous_answer;
+            let arr = Object.entries(props.firstQuestion.formals).map(([id, text]) => ([id, text]))
+
+            arr.sort((a, b) => {
+                const idA = parseInt(a[0]);
+                const idB = parseInt(b[0]);
+                const indexA = sortmap.indexOf(idA);
+                const indexB = sortmap.indexOf(idB);
+                if (idA === 7) {
+                    return 1;
+                }
+                return indexA - indexB;
+            });
+
+            setItems(arr)
+            // setItems(
+            //     Object.entries(props.firstQuestion.formals).map(([id, text]) => ([
+            //         id,
+            //         text
+            //     ])).sort(() => Math.random() - 0.5)
+            // )
         }, [props.firstQuestion]);
 
         return (
@@ -78,7 +93,7 @@ const QuestionPage = (props) => {
                                 <span className="text-lg font-bold sm:text-lg"> جمله غیر رسمی: </span>{question.informal}
                             </p>
 
-                            {isLoading?
+                            {isLoading ?
                                 <a
                                     className="disabled m-2 inline-block rounded border border-indigo-600
                                      bg-indigo-100 px-12 py-3 text-sm font-medium text-white hover:bg-transparent
@@ -102,7 +117,7 @@ const QuestionPage = (props) => {
                                 ذخیره و اتمام مشارکت
                             </a>
                             <h3 className="text-sm">
-                                شما تا کنون در بررسی {question['user_answer_count']} جمله مشارکت کرده‌اید.
+                                 شما تا کنون  {question['user_answer_count']} تا از {question['user_total_count']}  بررسی خود را بازبینی کرده‌اید.
                             </h3>
                         </div>
                     </div>

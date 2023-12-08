@@ -19,18 +19,25 @@ const StartPage = () => {
             setIsLoading(true);
             let response
             if (fiValue) {
-                response = await fetch(`${process.env.REACT_APP_API_HOST}/question/` + fiValue);
+                response = await fetch(`${process.env.REACT_APP_API_HOST}/question_edit/` + fiValue);
             } else {
                 setFiValue(username.current.value)
-                response = await fetch(`${process.env.REACT_APP_API_HOST}/question/` + username.current.value);
+                response = await fetch(`${process.env.REACT_APP_API_HOST}/question_edit/` + username.current.value);
             }
             const jsonData = await response.json();
             if (response.ok)
                 setFirstQuestion(jsonData);
-            else if (response.status === 404)
-                setError('کاربری با این نام کاربری وجود ندارد.')
+            else if (response.status === 404) {
+                console.log(response)
+                if (jsonData.detail === "User not found")
+                    setError('کاربری با این نام کاربری وجود ندارد.')
+                else if (jsonData.detail === "No more questions left for you. Thanks for you contribution")
+                    setError('سوالات شما به اتمام رسیده است. از مشارکت شما سپاس‌گزاریم.')
+                else
+                    setError('خطایی پیش آمده است.')
+            }
             else
-                setError('خطایی پیش آمده است.')
+                    setError('خطایی پیش آمده است.')
             return jsonData;
         } catch (error) {
             console.log(error);
