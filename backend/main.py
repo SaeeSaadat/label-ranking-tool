@@ -44,6 +44,31 @@ async def ask(user: str) -> models.Question:
 
 
 @app.get("/eval/question_edit/{user}")
+# This is regular question sender, but highlights method 7 for bias!
+async def ask(user: str) -> models.NewQuestion:
+    if not user_manager.does_user_exist(user):
+        logging.error(f"Invalid user request! -> {user}")
+        raise HTTPException(status_code=404, detail="User not found")
+
+    question = question_manager.get_question(user)
+    if question is None:
+        logging.warning(f"No more questions were fetched for user {user}")
+        raise HTTPException(status_code=404, detail="No more questions left for you. Thanks for you contribution")
+
+    logging.info(f"User {user} got question from row {question.row_num}")
+    new_question = models.NewQuestion(
+        row_num=question.row_num,
+        user_answer_count=question.user_answer_count,
+        user_total_count=100,
+        informal=question.informal,
+        previous_answer=[7, 1, 3, 4, 5, 6],
+        formals=question.formals[-1] + question.formals[:-1]
+    )
+    return question
+
+
+
+@app.get("/eval/question_edit_prv/{user}")
 async def ask(user: str) -> models.NewQuestion:
     if not user_manager.does_user_exist(user):
         logging.error(f"Invalid user request! -> {user}")

@@ -30,7 +30,8 @@ def get_question(username: str, question_query: Optional[str] = None) -> Optiona
     answers_query = f"""
         SELECT method_id, formal_text
         FROM formals
-        WHERE row_num = ?;
+        WHERE row_num = ?
+        order by method_id;
     """
     with get_db_cursor() as cursor:
         cursor.execute(question_query)
